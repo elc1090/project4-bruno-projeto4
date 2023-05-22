@@ -5,9 +5,9 @@ const cacheName = 'my-pwa-cache';
 const filesToCache = [
     '/',
     '/index.html',
-    '/styles.css',
-    '/app.js',
-    '/icon.png'
+    '/main.css',
+    '/js/index.js',
+    '/icon.jpg'
 ];
 
 // Instalação do Service Worker e armazenamento em cache dos arquivos

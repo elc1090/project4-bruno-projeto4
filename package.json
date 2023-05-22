@@ -1,9 +1,0 @@
-{
-  "dependencies": {
-    "tailwindcss": "^3.3.2"
-  },
-  "scripts": {
-    "dev": "npx tailwindcss -i ./styles.css -o ./dist/styles.css --watch",
-    "build:css": "tailwindcss build -i styles.css -o dist/styles.css"
-  }
-}
