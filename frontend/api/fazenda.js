@@ -1,5 +1,3 @@
-require('dotenv').config();
-
 const pgp = require('pg-promise')();
 const dbHost = process.env.DB_HOST ? process.env.DB_HOST : 'localhost';
 const dbUser = process.env.DB_USER ? process.env.DB_USER : 'postgres';
