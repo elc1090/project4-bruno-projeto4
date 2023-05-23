@@ -2,17 +2,22 @@
   "name": "backend",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "backend/server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon server.js"
+    "dev": "nodemon backend/server.js",
+    "start": "node backend/server.js",
+    "dev:css": "npx tailwindcss -i ./styles.css -o ./main.css --watch",
+    "build:css": "tailwindcss build -i styles.css -o ./main.css"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "tailwindcss": "^3.3.2",
     "body-parser": "^1.20.2",
     "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "pg": "^8.11.0",
     "pg-promise": "^11.4.3"

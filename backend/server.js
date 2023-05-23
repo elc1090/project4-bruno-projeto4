@@ -1,13 +1,19 @@
+require('dotenv').config();
+
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const pgp = require('pg-promise')();
-const db = pgp('postgres://postgres:postgres@db:5432/postgres');
+
+const port = process.env.PORT || 3000;
+const dbHost = process.env.DB_HOST;
+const dbUser = process.env.DB_USER;
+const dbPassword = process.env.DB_PASSWORD;
+
+const db = pgp('postgres://'+ dbUser +':'+ dbPassword + '@'+ dbHost + ':5433/postgres');
 
 const app = express();
 app.use(cors());
-
-const port = 3000;
 
 async function insertVisita(fazenda_id, data) {
     const query = 'INSERT INTO visita (fazenda_id, data) VALUES ($1, $2) RETURNING *';
