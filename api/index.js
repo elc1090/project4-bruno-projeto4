@@ -58,7 +58,7 @@ app.get('/api/fazenda', (req, res) => {
         });
 });
 
-app.get('/api/visita', (req, res) => {
+app.get('/visita', (req, res) => {
     db.any('SELECT visita.*, visita.id as idvisita, sugestaomanejo.*, fazenda.Nome as NomeFazenda FROM visita left join sugestaomanejo on visita.id = sugestaomanejo.visita_id join fazenda on fazenda.id = visita.fazenda_id')
         .then(data => {
 
