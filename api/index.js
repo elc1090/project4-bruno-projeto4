@@ -10,7 +10,7 @@ const dbHost = process.env.DB_HOST;
 const dbUser = process.env.DB_USER;
 const dbPassword = process.env.DB_PASSWORD;
 
-const db = pgp('postgres://'+ dbUser +':'+ dbPassword + '@'+ dbHost + ':5432/controle-potreiros');
+const db = pgp('postgres://' + dbUser + ':' + dbPassword + '@' + dbHost + ':5432/controle-potreiros');
 
 const app = express();
 app.use(cors());
@@ -27,17 +27,17 @@ async function insertVisita(fazenda_id, data) {
 async function insertSugestaoManejo(campo, area, pastagem, altura, categoria, cabecas, peso, carga, cc, sanidade, sugestoes, visita_id) {
     let query = 'INSERT INTO sugestaomanejo (campo, area, pastagem, altura, categoria, cabecas, peso, carga, cc, sanidade, sugestoes, visita_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) RETURNING *';
     let values = [
-        campo, 
-        area.length ? area : null, 
-        pastagem, 
-        altura.length ? altura : null, 
-        categoria.length ? categoria : null, 
-        cabecas.length ? cabecas : null, 
-        peso.length ? peso : null, 
-        carga.length ? carga : null, 
-        cc.length ? cc : null, 
-        sanidade.length ? sanidade : null, 
-        sugestoes, 
+        campo,
+        area.length ? area : null,
+        pastagem,
+        altura.length ? altura : null,
+        categoria.length ? categoria : null,
+        cabecas.length ? cabecas : null,
+        peso.length ? peso : null,
+        carga.length ? carga : null,
+        cc.length ? cc : null,
+        sanidade.length ? sanidade : null,
+        sugestoes,
         visita_id
     ];
 
@@ -108,20 +108,20 @@ app.get('/api/visita/:id', async (req, res) => {
 
 // Rota POST
 app.post('/api/visita', async (req, res) => {
-    const { fazenda_id, data  } = req.body;
+    const { fazenda_id, data } = req.body;
 
     try {
         const visita = await insertVisita(fazenda_id, data);
 
         res.json({ data: visita });
-    } catch(error) {
+    } catch (error) {
         res.status(500).json({ data: error, error: true });
     }
-    
+
 });
 
 app.post('/api/sugestao_manejo', async (req, res) => {
-    const { campo, area, pastagem, altura, categoria, cabecas, peso, carga, cc, sanidade, sugestoes, visita_id  } = req.body;
+    const { campo, area, pastagem, altura, categoria, cabecas, peso, carga, cc, sanidade, sugestoes, visita_id } = req.body;
 
     try {
         const sugestao = await insertSugestaoManejo(campo, area, pastagem, altura, categoria, cabecas, peso, carga, cc, sanidade, sugestoes, visita_id);
@@ -132,7 +132,4 @@ app.post('/api/sugestao_manejo', async (req, res) => {
     }
 });
 
-// Iniciar o servidor
-app.listen(port, () => {
-    console.log(`Servidor rodando em http://localhost:${port}`);
-});
+module.exports = app;
