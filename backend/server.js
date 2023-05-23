@@ -6,9 +6,9 @@ const bodyParser = require('body-parser');
 const pgp = require('pg-promise')();
 
 const port = process.env.PORT || 3000;
-const dbHost = process.env.DB_HOST;
-const dbUser = process.env.DB_USER;
-const dbPassword = process.env.DB_PASSWORD;
+const dbHost = process.env.DB_HOST ? process.env.DB_HOST : 'localhost';
+const dbUser = process.env.DB_USER ? process.env.DB_USER : 'postgres';
+const dbPassword = process.env.DB_PASSWORD ? process.env.DB_PASSWORD : 'postgres';
 
 const db = pgp('postgres://'+ dbUser +':'+ dbPassword + '@'+ dbHost + ':5432/controle-potreiros');
 
