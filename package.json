@@ -8,7 +8,7 @@
     "dev": "nodemon backend/server.js",
     "start": "node backend/server.js",
     "dev:css": "npx tailwindcss -i ./styles.css -o ./main.css --watch",
-    "build:css": "tailwindcss build -i styles.css -o ./main.css"
+    "build": "tailwindcss build -i styles.css -o ./main.css && node backend/server.js"
   },
   "keywords": [],
   "author": "",
