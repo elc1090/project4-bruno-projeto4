@@ -10,7 +10,7 @@ function toggleForm() {
 }
 
 async function carregarTabelaVisitas() {
-    const response = await fetch('api/visita');
+    const response = await fetch('https://controle-potreiros.herokuapp.com/api/visita');
     const { data } = await response.json();
 
     const tbody = document.querySelector('#tabela-visitas tbody');
