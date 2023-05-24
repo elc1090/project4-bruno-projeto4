@@ -11,7 +11,7 @@ function toggleForm() {
 function carregaDadosVisita() {
     let idVisita = localStorage.getItem('idVisita');
 
-    fetch(`http://localhost:3000/api/visita/${idVisita}`).then(response => {
+    fetch(`https://controle-potreiros.herokuapp.com/api/visita/${idVisita}`).then(response => {
         response.json().then(data => {
             let dataVisita = new Date(data.data).toLocaleDateString('pt-BR');
             document.getElementById("fazenda-visita").innerHTML = data.nomefazenda;
@@ -99,7 +99,7 @@ form.addEventListener("submit", async (event) => {
     };
 
     try {
-        const response = await fetch('http://localhost:3000/api/sugestao_manejo', {
+        const response = await fetch('https://controle-potreiros.herokuapp.com/api/sugestao_manejo', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

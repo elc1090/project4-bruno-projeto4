@@ -98,7 +98,7 @@
 <script>
     async function buscarFazendas() {
         try {
-            const response = await fetch('http://localhost:3000/api/fazenda');
+            const response = await fetch('https://controle-potreiros.herokuapp.com/api/fazenda');
             if (response.ok) {
                 const data = await response.json();
                 exibirFazendas(data.data);

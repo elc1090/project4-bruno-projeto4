@@ -53,7 +53,7 @@ async function carregarTabelaVisitas() {
 
 function carregarFazendas() {
     try {
-        fetch('http://localhost:3000/api/fazenda')
+        fetch('https://controle-potreiros.herokuapp.com/api/fazenda')
             .then(response => response.json())
             .then(({ data }) => {
                 const select = document.querySelector('#fazenda');
@@ -88,7 +88,7 @@ form.addEventListener("submit", async (event) => {
     };
 
     try {
-        const response = await fetch('http://localhost:3000/api/visita', {
+        const response = await fetch('https://controle-potreiros.herokuapp.com/api/visita', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
