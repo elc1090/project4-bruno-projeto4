@@ -2,6 +2,8 @@
 
 ![Screenshot do projeto](https://project3-brunotrojahn-phi.vercel.app/print.png "Screenshot do projeto").
 
+Acesso: https://project3-brunotrojahn-phi.vercel.app/
+
 #### Descrição
 
 Sistema para cadastro e controle de manejos de potreiros. Oferece funcao para cadastro de visitas e sugestoes de manejos. 
