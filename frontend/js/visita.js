@@ -8,43 +8,42 @@ function toggleForm() {
     divDados.classList.toggle("hidden");
 }
 
-function carregaDadosVisita() {
+async function carregaDadosVisita() {
     let idVisita = localStorage.getItem('idVisita');
 
-    fetch(`https://controle-potreiros.herokuapp.com/api/visita/${idVisita}`).then(response => {
-        response.json().then(data => {
-            let dataVisita = new Date(data.data).toLocaleDateString('pt-BR');
-            document.getElementById("fazenda-visita").innerHTML = data.nomefazenda;
-            document.getElementById("data-visita").innerHTML = dataVisita;
+    try {
+        let response = await axiosApi.get(`visita/${idVisita}`);
 
-            let htmlSugestoes = '';
-            data.sugestoes.forEach((sugestao) => {
-                htmlSugestoes += `<div class="w-100 border-b-2 pb-2 my-4">
-                    <span>
-                        ${sugestao.campo}
-                    </span>
-                    <button type"button" class="px-4 text-gray-500 underline rounded toggle-sugestao">Mostrar/esconder</button>
-                    <ul class="lista-sugestao hidden">
-                        <li class="ml-4 my-2">Area: ${sugestao.area ?? ''}</li>
-                        <li class="ml-4 my-2">Pastagem: ${sugestao.pastagem ?? ''}</li>
-                        <li class="ml-4 my-2">Altura: ${sugestao.altura ?? ''}</li>
-                        <li class="ml-4 my-2">Categoria: ${sugestao.categoria ?? ''}</li>
-                        <li class="ml-4 my-2">Cabecas: ${sugestao.cabecas ?? ''}</li>
-                        <li class="ml-4 my-2">Peso: ${sugestao.peso ?? ''}</li>
-                        <li class="ml-4 my-2">Carga: ${sugestao.carga ?? ''}</li>
-                        <li class="ml-4 my-2">CC: ${sugestao.cc ?? ''}</li>
-                        <li class="ml-4 my-2">Sanidade: ${sugestao.sanidade ?? ''}</li>
-                        <li class="ml-4 my-2">Sugestoes: ${sugestao.sugestoes ?? ''} </li>
-                    </ul>
-                </div>`;
-            });
+        let dataVisita = new Date(response.data.data).toLocaleDateString('pt-BR');
+        document.getElementById("fazenda-visita").innerHTML = response.data.nomefazenda;
+        document.getElementById("data-visita").innerHTML = dataVisita;
 
-            document.getElementById("div-sugestoes").innerHTML = htmlSugestoes;
+        let htmlSugestoes = '';
+        response.data.sugestoes.forEach((sugestao) => {
+            htmlSugestoes += `<div class="w-100 border-b-2 pb-2 my-4">
+            <span>
+                ${sugestao.campo}
+            </span>
+            <button type"button" class="px-4 text-gray-500 underline rounded toggle-sugestao">Mostrar/esconder</button>
+            <ul class="lista-sugestao hidden">
+                <li class="ml-4 my-2">Area: ${sugestao.area ?? ''}</li>
+                <li class="ml-4 my-2">Pastagem: ${sugestao.pastagem ?? ''}</li>
+                <li class="ml-4 my-2">Altura: ${sugestao.altura ?? ''}</li>
+                <li class="ml-4 my-2">Categoria: ${sugestao.categoria ?? ''}</li>
+                <li class="ml-4 my-2">Cabecas: ${sugestao.cabecas ?? ''}</li>
+                <li class="ml-4 my-2">Peso: ${sugestao.peso ?? ''}</li>
+                <li class="ml-4 my-2">Carga: ${sugestao.carga ?? ''}</li>
+                <li class="ml-4 my-2">CC: ${sugestao.cc ?? ''}</li>
+                <li class="ml-4 my-2">Sanidade: ${sugestao.sanidade ?? ''}</li>
+                <li class="ml-4 my-2">Sugestoes: ${sugestao.sugestoes ?? ''} </li>
+            </ul>
+        </div>`;
+        });
 
-        })
-    }).catch(error => {
+        document.getElementById("div-sugestoes").innerHTML = htmlSugestoes;
+    } catch(error) {
         console.log(error);
-    });
+    }
 }
 
 divDados.addEventListener("click", (event) => {
@@ -98,29 +97,16 @@ form.addEventListener("submit", async (event) => {
         visita_id
     };
 
-    try {
-        const response = await fetch('https://controle-potreiros.herokuapp.com/api/sugestao_manejo', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        });
-
-        if (response.ok) {
-            //const result = await response.json();
-            alert('Sugestão de manejo cadastrada com sucesso!');
-            setTimeout(() => {
-                window.location.href = 'visita.html';
-            }, 1000);
-        } else {
-            console.log('Erro ao enviar a sugestão de manejo:', response.statusText);
-            // Faça alguma ação de erro, exiba uma mensagem de erro, etc.
-        }
-    } catch (error) {
-        console.log('Erro ao enviar a sugestão de manejo:', error.message);
-        // Faça alguma ação de erro, exiba uma mensagem de erro, etc.
-    }
+    axiosApi.post('sugestao_manejo', 
+        data
+    ).then((response) => {
+        alert('Sugestão de manejo cadastrada com sucesso!');
+        setTimeout(() => {
+            window.location.href = 'visita.html';
+        }, 1000);
+    }).catch((error) => {
+        console.log(error)
+    });
 });
 
 var btn = document.querySelector("button.mobile-menu-button");

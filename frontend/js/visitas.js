@@ -10,55 +10,57 @@ function toggleForm() {
 }
 
 async function carregarTabelaVisitas() {
-    const response = await fetch('https://controle-potreiros.herokuapp.com/api/visita');
-    const { data } = await response.json();
+    try {
+        const { data } = await axiosApi.get('visita');
 
-    const tbody = document.querySelector('#tabela-visitas tbody');
+        const tbody = document.querySelector('#tabela-visitas tbody');
 
-    tbody.innerHTML = '';
+        tbody.innerHTML = '';
 
-    data.forEach(visita => {
-        
-        const tr = document.createElement('tr');
-        const tdData = document.createElement('td');
-        const tdFazenda = document.createElement('td');
-        const tdBotao = document.createElement('td');
+        data.data?.forEach(visita => {
 
-        tr.setAttribute('data-id', visita.id);
-        tdData.classList.add('md:px-6');
-        tdFazenda.classList.add('md:px-6');
-        tdBotao.classList.add('text-right');
-        tdBotao.classList.add('md:pr-6');
+            const tr = document.createElement('tr');
+            const tdData = document.createElement('td');
+            const tdFazenda = document.createElement('td');
+            const tdBotao = document.createElement('td');
 
-        tdData.innerText = visita.visita_data;
-        tdFazenda.innerText = visita.nome_fazenda;
-        tdBotao.innerHTML = '<button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded button-detalhes">Detalhes</button>';
+            tr.setAttribute('data-id', visita.id);
+            tdData.classList.add('md:px-6');
+            tdFazenda.classList.add('md:px-6');
+            tdBotao.classList.add('text-right');
+            tdBotao.classList.add('md:pr-6');
 
-        tr.appendChild(tdData);
-        tr.appendChild(tdFazenda);
-        tr.appendChild(tdBotao);
+            tdData.innerText = visita.visita_data;
+            tdFazenda.innerText = visita.nome_fazenda;
+            tdBotao.innerHTML = '<button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded button-detalhes">Detalhes</button>';
 
-        tbody.appendChild(tr);
-    });
+            tr.appendChild(tdData);
+            tr.appendChild(tdFazenda);
+            tr.appendChild(tdBotao);
 
-    const botoesDetalhes = document.querySelectorAll('.button-detalhes');
-    botoesDetalhes.forEach(botao => {   
-        botao.addEventListener('click', () => {
-            let idVisita = botao.parentElement.parentElement.getAttribute('data-id');
-            localStorage.setItem('idVisita', idVisita);
-            window.location.href = 'visita.html';
+            tbody.appendChild(tr);
         });
-    });
+
+        const botoesDetalhes = document.querySelectorAll('.button-detalhes');
+        botoesDetalhes.forEach(botao => {
+            botao.addEventListener('click', () => {
+                let idVisita = botao.parentElement.parentElement.getAttribute('data-id');
+                localStorage.setItem('idVisita', idVisita);
+                window.location.href = 'visita.html';
+            });
+        });
+    } catch(error) {
+        console.log(error);
+    }
 }
 
 function carregarFazendas() {
     try {
-        fetch('https://controle-potreiros.herokuapp.com/api/fazenda')
-            .then(response => response.json())
+        axiosApi.get('fazenda')
             .then(({ data }) => {
                 const select = document.querySelector('#fazenda');
 
-                data.forEach(fazenda => {
+                data.data.forEach(fazenda => {
                     const option = document.createElement('option');
                     option.value = fazenda.id;
                     option.innerText = fazenda.nome;
@@ -82,28 +84,19 @@ form.addEventListener("submit", async (event) => {
 
     let dataVisitaSql = dataVisita.split('/').reverse().join('-');
 
-    const data = {
-        data: dataVisitaSql,
-        fazenda_id: fazenda
-    };
-
     try {
-        const response = await fetch('https://controle-potreiros.herokuapp.com/api/visita', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        });
-
-        if (response.ok) {
+        axiosApi.post('visita', {
+            data: dataVisitaSql,
+            fazenda_id: fazenda
+        }).then((response) => {
+            console.log(response);
             alert('Visita cadastrada com sucesso!');
             setTimeout(() => {
                 window.location.href = 'visitas.html';
             }, 1000);
-        } else {
-            console.log('Erro ao cadastrar visita:', response.statusText);
-        }
+        }).catch((error) => {
+            console.log(error);
+        });
     } catch (error) {
         console.log('Erro ao cadastrar visita:', error.message);
     }
