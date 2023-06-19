@@ -15,7 +15,7 @@ const dbUser = process.env.DB_USER ? process.env.DB_USER : 'postgres';
 const dbPassword = process.env.DB_PASSWORD ? process.env.DB_PASSWORD : 'postgres';
 const tokenKey = process.env.TOKEN_KEY ? process.env.TOKEN_KEY : '@Trojahn7686';
 
-const db = pgp('postgres://'+ dbUser +':'+ dbPassword + '@'+ dbHost + ':5432/controle_potreiros');
+const db = pgp('postgres://'+ dbUser +':'+ dbPassword + '@'+ dbHost + ':5432/controle_potreiros?sslmode=require');
 
 const app = express();
 app.use(cors());
