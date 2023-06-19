@@ -1,6 +1,6 @@
 const axiosApi = axios.create({
     //baseURL: 'http://localhost:3000/api/',
-    baseURL: 'https://controle-potreiros.herokuapp/api/',
+    baseURL: 'api/',
     timeout: 30000,
     withCredentials: true,
 });
