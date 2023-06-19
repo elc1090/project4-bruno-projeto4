@@ -20,9 +20,9 @@ const db = pgp('postgres://'+ dbUser +':'+ dbPassword + '@'+ dbHost + ':5432/con
 const app = express();
 app.use(cors({
     origin: '*',
-    //credentials: true,
-    //exposedHeaders: ['Content-Length', 'X-Foo', 'X-Bar'],
-    //optionsSuccessStatus: 200
+    credentials: true,
+    exposedHeaders: ['Content-Length', 'X-Foo', 'X-Bar'],
+    optionsSuccessStatus: 200
 }));
 
 app.use(express.static('frontend'))
