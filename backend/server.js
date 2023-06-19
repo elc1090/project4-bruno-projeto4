@@ -18,7 +18,12 @@ const tokenKey = process.env.TOKEN_KEY ? process.env.TOKEN_KEY : '@Trojahn7686';
 const db = pgp('postgres://'+ dbUser +':'+ dbPassword + '@'+ dbHost + ':5432/controle_potreiros?sslmode=require');
 
 const app = express();
-app.use(cors());
+app.use(cors({
+    origin: '*',
+    //credentials: true,
+    //exposedHeaders: ['Content-Length', 'X-Foo', 'X-Bar'],
+    //optionsSuccessStatus: 200
+}));
 
 app.use(express.static('frontend'))
 
