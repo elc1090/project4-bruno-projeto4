@@ -12,14 +12,16 @@ async function carregaDadosVisita() {
     let idVisita = localStorage.getItem('idVisita');
 
     try {
-        let response = await axiosApi.get(`visita/${idVisita}`);
+        let { data } = await axiosApi.get(`visita/${idVisita}`);
+        
+        let dadosVisita = data.data;
 
-        let dataVisita = new Date(response.data.data).toLocaleDateString('pt-BR');
-        document.getElementById("fazenda-visita").innerHTML = response.data.nomefazenda;
+        let dataVisita = new Date(dadosVisita.data).toLocaleDateString('pt-BR');
+        document.getElementById("fazenda-visita").innerHTML = dadosVisita.nomefazenda;
         document.getElementById("data-visita").innerHTML = dataVisita;
 
         let htmlSugestoes = '';
-        response.data.sugestoes.forEach((sugestao) => {
+        dadosVisita.sugestoes.forEach((sugestao) => {
             htmlSugestoes += `<div class="w-100 border-b-2 pb-2 my-4">
             <span>
                 ${sugestao.campo}
@@ -39,6 +41,12 @@ async function carregaDadosVisita() {
             </ul>
         </div>`;
         });
+
+        if(data.is_client) {
+            buttonAddSugestao.classList.add("hidden");
+        } else {
+            buttonAddSugestao.classList.remove("hidden");
+        }
 
         document.getElementById("div-sugestoes").innerHTML = htmlSugestoes;
     } catch(error) {

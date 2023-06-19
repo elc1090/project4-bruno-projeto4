@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>App teste</title>
+    <title>Potrol</title>
 
     <link rel="manifest" href="manifest.json">
     <link rel="stylesheet" href="main.css">
@@ -33,7 +33,12 @@
                 <!-- Secondary Navbar items -->
                 <div class="hidden md:flex items-center space-x-3 ">
                     <a href="login.html"
-                        class="py-2 px-2 font-medium text-gray-500 rounded hover:bg-green-500 hover:text-white transition duration-300">Login
+                        class="py-2 px-2 font-medium text-gray-500 rounded hover:bg-green-500 hover:text-white transition duration-300">
+                        Login
+                    </a>
+                    <a href="novo-usuario.html"
+                        class="py-2 px-2 font-medium text-white bg-green-500 rounded hover:bg-green-400 transition duration-300">
+                        Registrar-se
                     </a>
                 </div>
                 <!-- Mobile menu button -->
@@ -59,6 +64,11 @@
                 <li>
                     <a href="login.html" class="block text-sm px-2 py-4">
                         Login
+                    </a>
+                </li>
+                <li>
+                    <a href="novo-usuario.html" class="block text-sm px-2 py-4">
+                        Registrar-se
                     </a>
                 </li>
             </ul>
@@ -98,32 +108,33 @@
 <script src="axios/axios.min.js"></script>
 <script src="axios/api.js"></script>
 <script>
-    const formNovoUsuario = document.getElementById('formNovoUsuario');
-    formNovoUsuario.addEventListener('submit', function (event) {
+    var mobileMenuButton = document.querySelector("button.mobile-menu-button");
+    var mobileMenu = document.querySelector(".mobile-menu");
+
+    mobileMenuButton.addEventListener("click", () => {
+        mobileMenu.classList.toggle("hidden");
+    });
+
+    const formLogin = document.getElementById('formLogin');
+
+    formLogin.addEventListener('submit', function (event) {
         event.preventDefault();
-        const nome = document.getElementById('nome').value;
         const email = document.getElementById('email').value;
         const senha = document.getElementById('senha').value;
-        const confirmacaoSenha = document.getElementById('confirmacaoSenha').value;
-        if (senha !== confirmacaoSenha) {
-            alert('As senhas não conferem');
-            return;
-        }
 
-        const usuario = {
-            nome,
-            email,
-            senha
-        };
-        axiosApi.post('usuario', usuario)
-            .then(function (response) {
-                alert('Usuário cadastrado com sucesso');
-                window.location.href = 'login.html';
-            })
-            .catch(function (error) {
-                alert('Erro ao cadastrar usuário');
-                console.log(error);
-            });
+        axiosApi.post('login', {
+            email: email,
+            senha: senha
+        }).then(function (response) {
+            let { data } = response.data;
+
+            localStorage.setItem("access_token", data);
+            
+            window.location.href = 'visitas.html';
+        }).catch(function (error) {
+            alert('Confirma os dados e tente novamente');
+            console.log(error);
+        });
     });
 </script>
 

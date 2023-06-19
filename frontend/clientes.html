@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Potrol</title>
+    <title>Potrol - Clientes</title>
 
     <link rel="manifest" href="manifest.json">
     <link rel="stylesheet" href="main.css">
@@ -81,13 +81,13 @@
     </nav>
     <main>
         <div class="container mx-auto p-4">
-            <div id="divListaFazendas">
-                <h1 class="text-2xl font-bold mb-4 text-center">Fazendas</h1>
+            <div id="divListaClientes">
+                <h1 class="text-2xl font-bold mb-4 text-center">Clientes</h1>
 
                 <div class="flex justify-center mb-4">
-                    <button type="button" id="btnCadastrarFazenda"
+                    <button type="button" id="btnCadastrarCliente"
                         class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
-                        Cadastrar fazenda
+                        Cadastrar cliente
                     </button>
                 </div>
 
@@ -103,13 +103,13 @@
                             </th>
                         </tr>
                     </thead>
-                    <tbody id="fazendasTableBody">
+                    <tbody id="clientesTableBody">
                     </tbody>
                 </table>
             </div>
 
-            <form class="hidden shadow-md rounded px-8 pt-6 pb-8 mb-4" id="formCadastroFazenda">
-                <h1 class="text-2xl font-bold mb-4 text-center">Nova fazenda</h1>
+            <form class="hidden shadow-md rounded px-8 pt-6 pb-8 mb-4" id="formCadastroCliente">
+                <h1 class="text-2xl font-bold mb-4 text-center">Novo cliente</h1>
 
                 <div class="mb-4">
                     <label class="block text-gray-700 text-sm font-bold mb-2" for="nome">
@@ -120,14 +120,28 @@
                         id="nome" type="text" placeholder="Informe o nome">
                 </div>
                 <div class="mb-4">
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="cliente">
-                        Cliente
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="email">
+                        E-mail
                     </label>
-                    <select
+                    <input
+                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        id="email" type="text" placeholder="Informe o e-mail">
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="senha">
+                        Senha
+                    </label>
+                    <input
                         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-                        id="cliente">
-                        <option value="">Selecione um cliente</option>
-                    </select>
+                        id="senha" type="password" placeholder="Informe a senha">
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="confirmacaoSenha">
+                        Confirme a senha
+                    </label>
+                    <input
+                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+                        id="confirmacaoSenha" type="password" placeholder="Informe a senha">
                 </div>
                 <div class="mb-4">
                     <button
@@ -150,88 +164,71 @@
 <script>
     var mobileMenuButton = document.querySelector("button.mobile-menu-button");
     var mobileMenu = document.querySelector(".mobile-menu");
-    var btnCadastrarFazenda = document.getElementById('btnCadastrarFazenda');
-    var formCadastroFazenda = document.getElementById('formCadastroFazenda');
-    var divListaFazendas = document.getElementById('divListaFazendas');
+    var btnCadastrarCliente = document.getElementById('btnCadastrarCliente');
+    var formCadastroCliente = document.getElementById('formCadastroCliente');
+    var divListaClientes = document.getElementById('divListaClientes');
     var btnVoltar = document.getElementById('buttonVoltar');
 
     mobileMenuButton.addEventListener("click", () => {
         mobileMenu.classList.toggle("hidden");
     });
 
-    btnCadastrarFazenda.addEventListener('click', () => {
-        formCadastroFazenda.classList.toggle('hidden');
-        divListaFazendas.classList.toggle('hidden');
+    btnCadastrarCliente.addEventListener('click', () => {
+        formCadastroCliente.classList.toggle('hidden');
+        divListaClientes.classList.toggle('hidden');
     });
 
     btnVoltar.addEventListener('click', () => {
-        formCadastroFazenda.classList.toggle('hidden');
-        divListaFazendas.classList.toggle('hidden');
+        formCadastroCliente.classList.toggle('hidden');
+        divListaClientes.classList.toggle('hidden');
     });
 
-    formCadastroFazenda.addEventListener("submit", async (event) => {
+    formCadastroCliente.addEventListener("submit", async (event) => {
         event.preventDefault();
 
         const nome = document.getElementById('nome').value;
-        const cliente = document.getElementById('cliente').value;
+        const email = document.getElementById('email').value;
+        const senha = document.getElementById('senha').value;
 
-        axiosApi.post('fazenda', {
+        axiosApi.post('cliente', {
             nome: nome,
-            cliente_id: cliente
+            email: email,
+            senha: senha
         }).then((response) => {
-            alert('Fazenda cadastrada com sucesso!');
+            alert('Cliente cadastrado com sucesso!');
             setTimeout(() => {
-                window.location.href = 'fazendas.html';
+                window.location.href = 'clientes.html';
             }, 1000);
         }).catch((error) => {
-            alert('Erro ao cadastrar a fazenda! Verifique os dados e tente novamente.');
+            alert('Erro ao cadastrar cliente! Verifique os dados e tente novamente.');
         });
     });
 
-    function carregarClientes() {
-            axiosApi.get('cliente')
-                .then(({ data }) => {
-                    const select = document.querySelector('#cliente');
-
-                    data.data.forEach(cliente => {
-                        const option = document.createElement('option');
-                        option.value = cliente.id;
-                        option.innerText = cliente.nome;
-                        select.appendChild(option);
-                    });
-                }).catch((error) => {
-                    console.log(error);
-                    alert('Erro ao carregar os clientes');
-                });
-    }
-
-    async function buscarFazendas() {
+    async function buscarClientes() {
         try {
-            const { data } = await axiosApi.get('fazenda')
+            const { data } = await axiosApi.get('cliente')
 
-            if(data.is_client) {
-                btnCadastrarFazenda.classList.add('hidden');
+            if (data.is_client) {
+                divListaClientes.innerHTML = '<h1 class="text-2xl font-bold mb-4 text-center">Você não tem permissão</h1>';
             } else {
-                btnCadastrarFazenda.classList.remove('hidden');
+                exibirClientes(data.data);
             }
-
-            exibirFazendas(data.data);
         } catch (error) {
-            console.error('Erro ao buscar as fazendas:', error.message);
+            console.error('Erro ao buscar clientes:', error.message);
         }
     }
 
-    function exibirFazendas(fazendas) {
-        const tableBody = document.getElementById('fazendasTableBody');
+    function exibirClientes(clientes) {
+        const tableBody = document.getElementById('clientesTableBody');
 
-        fazendas.forEach((fazenda) => {
+        clientes.forEach((cliente) => {
             const row = document.createElement('tr');
             row.innerHTML = `
                 <td class="px-6 py-4 whitespace-nowrap border-b border-gray-200">
-                    ${fazenda.nome}
+                    ${cliente.nome}
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap border-b border-gray-200 text-right">
-                    <button data-id="${fazenda.id}" 
+                    <button data-id="${cliente.id}" 
                       class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-2 rounded button-excluir">
                         Excluir
                     </button>
@@ -244,25 +241,25 @@
         var botoesExcluir = document.querySelectorAll('.button-excluir');
         botoesExcluir.forEach(botao => {
             botao.addEventListener('click', () => {
-                let idFazenda = botao.getAttribute('data-id');
-                var result = confirm("Excluir a fazenda?");
+                let idCliente = botao.getAttribute('data-id');
+                var result = confirm("Excluir o cliente?");
                 if (result) {
-                     axiosApi.delete(`fazenda/${idFazenda}`)
+                    axiosApi.delete(`cliente/${idCliente}`)
                         .then((response) => {
-                            alert('Fazenda excluída com sucesso!');
+                            alert('Cliente excluído com sucesso!');
                             setTimeout(() => {
-                                window.location.href = 'fazendas.html';
+                                window.location.href = 'clientes.html';
                             }, 1000);
                         }).catch((error) => {
                             console.log(error);
                         });
                 }
-               
+
             });
         });
     }
 
-    window.addEventListener('load', buscarFazendas);
-    window.addEventListener('load', carregarClientes);
+    window.addEventListener('load', buscarClientes);
 </script>
+
 </html>

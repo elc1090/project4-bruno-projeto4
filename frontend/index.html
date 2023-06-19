@@ -4,10 +4,19 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>App teste</title>
+    <title>Potrol</title>
 
     <link rel="manifest" href="manifest.json">
     <link rel="stylesheet" href="main.css">
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('../service-worker.js')
+                    .then(registration => console.log('Service Worker registrado'))
+                    .catch(error => console.log('Falha ao registrar o Service Worker'));
+            });
+        }
+    </script>
 </head>
 <body>
     <nav class="bg-white shadow-lg mb-4">
@@ -34,12 +43,17 @@
                             class="py-4 px-2 text-gray-500 font-semibold hover:text-green-500 transition duration-300">
                             Fazendas
                         </a>
+                        <a href="clientes.html" class="py-4 px-2 text-gray-500 font-semibold hover:text-green-500 transition duration-300">
+                            Clientes
+                        </a>
                     </div>
                 </div>
                 <!-- Secondary Navbar items -->
                 <div class="hidden md:flex items-center space-x-3 ">
                     <a href="login.html"
-                        class="py-2 px-2 font-medium text-gray-500 rounded hover:bg-green-500 hover:text-white transition duration-300">Login</a>
+                        class="py-2 px-2 font-medium text-gray-500 rounded hover:bg-green-500 hover:text-white transition duration-300">
+                        Login
+                    </a>
                     <a href="novo-usuario.html"
                         class="py-2 px-2 font-medium text-white bg-green-500 rounded hover:bg-green-400 transition duration-300">
                         Registrar-se
@@ -76,6 +90,11 @@
                     </a>
                 </li>
                 <li>
+                    <a href="clientes.html" class="block text-sm px-2 py-4 hover:bg-green-500 transition duration-300">
+                        Clientes
+                    </a>
+                </li>
+                <li>
                     <a href="login.html" class="block text-sm px-2 py-4">
                         Login
                     </a>
@@ -94,6 +113,12 @@
             <button
                 class="mt-10 py-4 px-2 bg-green-500 rounded text-white font-semibold hover:bg-green-400 transition duration-300 install-button hidden">
                 Instalar app
+            </button>
+            <button 
+              class="mt-10 text-red underline font-semibold"
+              id="logoutButton"
+              type="button">
+                Sair
             </button>
         </div>
     </main>

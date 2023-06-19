@@ -1,28 +1,22 @@
 var btn = document.querySelector("button.mobile-menu-button");
 var menu = document.querySelector(".mobile-menu");
+var logoutBtn = document.querySelector("#logoutButton");
 
 btn.addEventListener("click", () => {
     menu.classList.toggle("hidden");
 });
 
-if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-        navigator.serviceWorker.register('../service-worker.js')
-            .then(registration => {
-                console.log('Service Worker registrado com sucesso:', registration.scope);
-            })
-            .catch(error => {
-                console.log('Falha ao registrar o Service Worker:', error);
-            });
-    });
-}
+logoutBtn.addEventListener("click", () => {
+    localStorage.removeItem("access_token");
+    window.location.href = "login.html";
+});
 
 var installButton = document.querySelector('.install-button');
 
 window.addEventListener('beforeinstallprompt', event => {
     event.preventDefault();
 
-    const deferredPrompt = event;
+    var deferredPrompt = event;
     installButton.style.display = 'block';
 
     installButton.addEventListener('click', () => {

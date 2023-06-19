@@ -27,6 +27,7 @@ async function carregarTabelaVisitas() {
             tr.setAttribute('data-id', visita.id);
             tdData.classList.add('md:px-6');
             tdFazenda.classList.add('md:px-6');
+            tdFazenda.classList.add('text-center');
             tdBotao.classList.add('text-right');
             tdBotao.classList.add('md:pr-6');
 
@@ -49,6 +50,12 @@ async function carregarTabelaVisitas() {
                 window.location.href = 'visita.html';
             });
         });
+
+        if (data.is_client) {
+            buttonAddVisita.classList.add('hidden');
+        } else {
+            buttonAddVisita.classList.remove('hidden');
+        }
     } catch(error) {
         console.log(error);
     }

@@ -6,6 +6,7 @@ const axiosApi = axios.create({
 });
 
 axiosApi.defaults.headers.post['Content-Type'] = 'application/json';
+axiosApi.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('access_token');
 
 axiosApi.interceptors.request.use(
     config => {
@@ -24,8 +25,10 @@ axiosApi.interceptors.response.use(
         const originalRequest = error.config;
         if ((error.response?.status === 403 || error.response?.status === 401) && !originalRequest._retry) {
             originalRequest._retry = true;
-            if (originalRequest.url != '/login')
-                console.log('logout');
+            if (originalRequest.url != '/login') {
+                alert('Sessão expirada, faça login novamente');
+                window.location.href = '/login.html';
+            }
         }
         return Promise.reject(error);
     }
