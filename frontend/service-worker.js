@@ -5,7 +5,7 @@ const staticCacheName = 'potrol-cache-v2';
 const filesToCache = [
     '/*.html',
     '/main.css',
-    '/js/',
+    '/js/*.js',
     '/icon.jpg'
 ];
 
@@ -26,7 +26,10 @@ self.addEventListener('activate', event => {
                 cacheNames
                     .filter(cacheName => (cacheName.startsWith('potrol-cache-')))
                     .filter(cacheName => (cacheName !== staticCacheName))
-                    .map(cacheName => caches.delete(cacheName))
+                    .map(cacheName => {
+                        console.log(cacheName)
+                        caches.delete(cacheName)
+                    })
             );
         })
     );
