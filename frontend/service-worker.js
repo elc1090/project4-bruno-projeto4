@@ -3,9 +3,13 @@ const staticCacheName = 'potrol-cache-v3';
 
 // Lista de arquivos a serem armazenados em cache
 const filesToCache = [
-    '/',
+    '/clientes.html',
+    '/visitas.html',
+    '/index.html',
     '/main.css',
-    '/js/',
+    '/js/index.js',
+    '/js/visita.js',
+    '/js/visitas.js',
     '/icon.jpg'
 ];
 
