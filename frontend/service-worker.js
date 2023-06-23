@@ -1,5 +1,5 @@
 // Defina o nome do cache
-const staticCacheName = 'potrol-cache-v2';
+const staticCacheName = 'potrol-cache-v3';
 
 // Lista de arquivos a serem armazenados em cache
 const filesToCache = [
