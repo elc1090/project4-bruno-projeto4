@@ -5,7 +5,7 @@ const staticCacheName = 'potrol-cache-v2';
 const filesToCache = [
     '/*.html',
     '/main.css',
-    '/js',
+    '/js/',
     '/icon.jpg'
 ];
 
