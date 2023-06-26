@@ -121,6 +121,7 @@
             axiosApi.get('fazenda')
                 .then(({ data }) => {
                     const select = document.querySelector('#fazenda');
+                    select.innerHTML = '<option value="">Selecione a fazenda</option>';
 
                     data.data.forEach(fazenda => {
                         const option = document.createElement('option');

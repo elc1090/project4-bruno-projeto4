@@ -101,7 +101,8 @@
             axiosApi.get('cliente')
                 .then(({ data }) => {
                     const select = document.querySelector('#cliente');
-
+                    select.innerHTML = '<option value="">Selecione um cliente</option>';
+                    
                     data.data.forEach(cliente => {
                         const option = document.createElement('option');
                         option.value = cliente.id;
