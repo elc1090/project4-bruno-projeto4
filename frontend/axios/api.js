@@ -1,5 +1,4 @@
 const axiosApi = axios.create({
-    //baseURL: 'http://localhost:3000/api/',
     baseURL: 'api/',
     timeout: 30000,
     withCredentials: true,
@@ -27,7 +26,7 @@ axiosApi.interceptors.response.use(
             originalRequest._retry = true;
             if (originalRequest.url != '/login') {
                 alert('Sessão expirada, faça login novamente');
-                window.location.href = '/login.html';
+                window.location.href = '/';
             }
         }
         return Promise.reject(error);

@@ -1,15 +1,16 @@
 // Defina o nome do cache
-const staticCacheName = 'potrol-cache-v3';
+const staticCacheName = 'potrol-cache-v4';
 
 // Lista de arquivos a serem armazenados em cache
 const filesToCache = [
-    '/clientes.html',
-    '/visitas.html',
+    '/',
     '/index.html',
+    '/pages/clientes.html',
+    '/pages/fazendas.html',
+    '/pages/home.html',
+    '/pages/visita.html',
+    '/pages/visitas.html',
     '/main.css',
-    '/js/index.js',
-    '/js/visita.js',
-    '/js/visitas.js',
     '/icon.jpg'
 ];
 
@@ -31,7 +32,6 @@ self.addEventListener('activate', event => {
                     .filter(cacheName => (cacheName.startsWith('potrol-cache-')))
                     .filter(cacheName => (cacheName !== staticCacheName))
                     .map(cacheName => {
-                        console.log(cacheName)
                         caches.delete(cacheName)
                     })
             );

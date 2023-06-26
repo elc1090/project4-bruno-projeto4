@@ -1,0 +1,178 @@
+<div class="md:container md:mx-auto mx-4">
+    <div id="divListaFazendas">
+        <div class="text-center">
+            <h1 class="text-4xl">Fazendas</h1>
+
+            <button type="button" id="btnCadastrarFazenda"
+                class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 my-4 rounded">
+                Cadastrar fazenda
+            </button>
+        </div>
+
+        <table class="min-w-full mt-4 bg-white border border-gray-200">
+            <thead>
+                <tr>
+                    <th
+                        class="px-6 py-4 bg-gray-100 text-left text-sm font-semibold text-gray-600 uppercase border-b border-gray-200">
+                        Nome
+                    </th>
+                    <th
+                        class="px-6 py-4 bg-gray-100 text-left text-sm font-semibold text-gray-600 uppercase border-b border-gray-200">
+                    </th>
+                </tr>
+            </thead>
+            <tbody id="fazendasTableBody">
+            </tbody>
+        </table>
+    </div>
+
+    <form class="hidden shadow-md rounded px-8 pt-6 pb-8 mb-4" id="formCadastroFazenda">
+        <h1 class="text-2xl font-bold mb-4 text-center">Nova fazenda</h1>
+
+        <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="nome">
+                Nome
+            </label>
+            <input
+                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                id="nome" type="text" placeholder="Informe o nome">
+        </div>
+        <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="cliente">
+                Cliente
+            </label>
+            <select
+                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+                id="cliente">
+                <option value="">Selecione um cliente</option>
+            </select>
+        </div>
+        <div class="mb-4">
+            <button
+                class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                type="submit">
+                Salvar
+            </button>
+            <button
+                class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                type="button" id="buttonVoltar">
+                Voltar
+            </button>
+        </div>
+    </form>
+</div>
+
+<script>
+    var btnCadastrarFazenda = document.getElementById('btnCadastrarFazenda');
+    var formCadastroFazenda = document.getElementById('formCadastroFazenda');
+    var divListaFazendas = document.getElementById('divListaFazendas');
+    var btnVoltar = document.getElementById('buttonVoltar');
+
+    btnCadastrarFazenda.addEventListener('click', () => {
+        formCadastroFazenda.classList.toggle('hidden');
+        divListaFazendas.classList.toggle('hidden');
+    });
+
+    btnVoltar.addEventListener('click', () => {
+        formCadastroFazenda.classList.toggle('hidden');
+        divListaFazendas.classList.toggle('hidden');
+    });
+
+    formCadastroFazenda.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        const nome = document.getElementById('nome').value;
+        const cliente = document.getElementById('cliente').value;
+
+        axiosApi.post('fazenda', {
+            nome: nome,
+            cliente_id: cliente
+        }).then((response) => {
+            alert('Fazenda cadastrada com sucesso!');
+            setTimeout(() => {
+                window.location.reload();
+            }, 1000);
+        }).catch((error) => {
+            alert('Erro ao cadastrar a fazenda! Verifique os dados e tente novamente.');
+        });
+    });
+
+    function carregarClientes() {
+            axiosApi.get('cliente')
+                .then(({ data }) => {
+                    const select = document.querySelector('#cliente');
+
+                    data.data.forEach(cliente => {
+                        const option = document.createElement('option');
+                        option.value = cliente.id;
+                        option.innerText = cliente.nome;
+                        select.appendChild(option);
+                    });
+                }).catch((error) => {
+                    console.log(error);
+                    alert('Erro ao carregar os clientes');
+                });
+    }
+
+    async function buscarFazendas() {
+        try {
+            const { data } = await axiosApi.get('fazenda')
+
+            if(data.is_client) {
+                btnCadastrarFazenda.classList.add('hidden');
+            } else {
+                btnCadastrarFazenda.classList.remove('hidden');
+            }
+
+            if(data.data)
+                exibirFazendas(data.data);
+        } catch (error) {
+            console.error('Erro ao buscar as fazendas:', error.message);
+        }
+    }
+
+    function exibirFazendas(fazendas) {
+        const tableBody = document.getElementById('fazendasTableBody');
+        tableBody.innerHTML = '';
+        
+        fazendas.forEach((fazenda) => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td class="px-6 whitespace-nowrap border-b border-gray-200">
+                    ${fazenda.nome}
+                </td>
+                <td class="px-6 whitespace-nowrap border-b border-gray-200 text-right">
+                    <button data-id="${fazenda.id}" 
+                      class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-2 rounded button-excluir">
+                        Excluir
+                    </button>
+                </td>
+            `;
+
+            tableBody.appendChild(row);
+        });
+
+        var botoesExcluir = document.querySelectorAll('.button-excluir');
+        botoesExcluir.forEach(botao => {
+            botao.addEventListener('click', () => {
+                let idFazenda = botao.getAttribute('data-id');
+                var result = confirm("Excluir a fazenda?");
+                if (result) {
+                     axiosApi.delete(`fazenda/${idFazenda}`)
+                        .then((response) => {
+                            alert('Fazenda excluída com sucesso!');
+                            setTimeout(() => {
+                                window.location.reload();
+                            }, 1000);
+                        }).catch((error) => {
+                            console.log(error);
+                        });
+                }
+               
+            });
+        });
+    }
+
+    buscarFazendas();
+    carregarClientes();
+</script>

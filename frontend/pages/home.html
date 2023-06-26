@@ -1,0 +1,53 @@
+<div class="container mx-auto text-center flex flex-col justify-center items-center">
+    <h1 class="text-4xl">Bem vindo ao Potrol</h1>
+    <button
+        class="mt-10 py-4 px-2 bg-green-500 rounded text-white font-semibold hover:bg-green-400 transition duration-300 install-button hidden">
+        Instalar app
+    </button>
+    <button class="mt-10 text-xl underline font-semibold hidden" id="loginButton" type="button">
+        Login
+    </button>
+    <button class="mt-10 text-red underline font-semibold" id="logoutButton" type="button">
+        Sair
+    </button>
+</div>
+<script>
+    var logoutBtn = document.querySelector("#logoutButton");
+    var loginBtn = document.querySelector("#loginButton");
+    var installButton = document.querySelector('.install-button');
+
+    logoutBtn.addEventListener("click", () => {
+        localStorage.removeItem("access_token");
+        window.location.href = "/";
+    });     
+
+    loginBtn.addEventListener("click", () => {
+        window.location.href = "#login";
+    }); 
+
+    if (localStorage.getItem("access_token") === null) {
+        loginBtn.classList.remove("hidden");
+    }
+
+    window.addEventListener('beforeinstallprompt', event => {
+        event.preventDefault();
+
+        var deferredPrompt = event;
+        installButton.style.display = 'block';
+
+        installButton.addEventListener('click', () => {
+            console.log('install');
+            installButton.style.display = 'none';
+            deferredPrompt.prompt();
+            deferredPrompt.userChoice
+                .then(choiceResult => {
+                    if (choiceResult.outcome === 'accepted') {
+                        console.log('O aplicativo foi instalado com sucesso!');
+                    } else {
+                        console.log('O usuário cancelou a instalação.');
+                    }
+                    deferredPrompt = null;
+                });
+        });
+    });
+</script>

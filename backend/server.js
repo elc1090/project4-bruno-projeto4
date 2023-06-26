@@ -78,7 +78,16 @@ app.use(bodyParser.json());
 
 // Rotas Fazenda
 app.get('/api/fazenda', auth, (req, res) => {
-    db.any('SELECT * FROM fazenda')
+    let query = '';
+
+    if (req.user.tipo === 1) {
+        query = 'SELECT fazenda.* FROM fazenda where cliente_id in (select id from cliente where consultor_id = $1)';
+    } else if (req.user.tipo === 2) {
+        query = 'SELECT fazenda.* FROM fazenda join cliente on cliente.id = fazenda.cliente_id where cliente.usuario_id = $1';
+    }
+    let values = [req.user.user_id];
+
+    db.any(query, values)
         .then(data => {
             res.json({
                 data: data,
@@ -124,7 +133,8 @@ app.get('/api/visita', auth, (req, res) => {
     let values = [];
 
     if (req.user.tipo === 1) {
-        query = 'SELECT visita.*, visita.id as idvisita, sugestaomanejo.*, fazenda.Nome as NomeFazenda FROM visita left join sugestaomanejo on visita.id = sugestaomanejo.visita_id join fazenda on fazenda.id = visita.fazenda_id order by visita.data desc';
+        query = 'SELECT visita.*, visita.id as idvisita, sugestaomanejo.*, fazenda.Nome as NomeFazenda FROM visita left join sugestaomanejo on visita.id = sugestaomanejo.visita_id join fazenda on fazenda.id = visita.fazenda_id join cliente on cliente.id = fazenda.cliente_id where cliente.consultor_id = $1 order by visita.data desc';
+        values = [req.user.user_id];
     } else if(req.user.tipo === 2) {
         query = 'SELECT visita.*, visita.id as idvisita, sugestaomanejo.*, fazenda.Nome as NomeFazenda FROM visita left join sugestaomanejo on visita.id = sugestaomanejo.visita_id join fazenda on fazenda.id = visita.fazenda_id join cliente on cliente.id = fazenda.cliente_id where cliente.usuario_id = $1 order by visita.id desc';
         values = [req.user.user_id];
