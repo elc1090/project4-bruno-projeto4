@@ -2,7 +2,6 @@
 
 ![Screenshot do projeto](https://controle-potreiros.herokuapp.com/print.png "Screenshot do projeto").
 
-
 #### Descrição
 
 Aplicativo para cadastro e controle de manejos de potreiros. Oferece função para cadastro de visitas e sugestões de manejos.
@@ -14,10 +13,12 @@ https://controle-potreiros.herokuapp.com/
 #### Testes
 
 Cadastro de usuário
+Login
 Cadastro de fazenda
 Cadastro de visita
 Cadastro de manejos
 Cadastro de clientes
+Login de cliente
 
 #### Desenvolvedor(es)
 Bruno Frizzo Trojahn
