@@ -1,5 +1,5 @@
 // Defina o nome do cache
-const staticCacheName = 'potrol-cache-v4';
+const staticCacheName = 'potrol-cache-v6';
 
 // Lista de arquivos a serem armazenados em cache
 const filesToCache = [
@@ -11,7 +11,10 @@ const filesToCache = [
     '/pages/visita.html',
     '/pages/visitas.html',
     '/main.css',
-    '/icon.jpg'
+    '/icon.jpg',
+    '/js/router.js',
+    '/axios/axios.min.js',
+    '/service-worker.js'
 ];
 
 // Instalação do Service Worker e armazenamento em cache dos arquivos
@@ -43,6 +46,12 @@ self.addEventListener('activate', event => {
 self.addEventListener('fetch', event => {
     event.respondWith(
         caches.match(event.request)
-            .then(response => response || fetch(event.request))
+            .then(response => {
+                if (response) {
+                    return response;
+                } else {
+                    return fetch(event.request)
+                }
+            })
     );
 });

@@ -2,14 +2,21 @@
 function showPage(pageId) {
     // Obtém o arquivo HTML da página específica
     const pageUrl = `pages/${pageId}.html`;
-    fetch(pageUrl)
-        .then(response => response.text())
+
+    const response = caches.match(pageUrl)
+        .then(response => {
+            if (response) {
+                return response;
+            } else {
+                return fetch(pageUrl)
+            }
+        })
+
+    response.then(response => response.text())
         .then(html => {
             // Insere o conteúdo no elemento #content
             const contentElement = document.getElementById('content');
             contentElement.innerHTML = html;
-            contentElement.classList.remove('hidden');
-            contentElement.classList.add('visible');
 
             // Executa o código JavaScript dentro do conteúdo da página
             const scripts = contentElement.querySelectorAll('script');
@@ -18,8 +25,7 @@ function showPage(pageId) {
                 scriptElement.textContent = script.innerHTML;
                 contentElement.appendChild(scriptElement);
             });
-        })
-        .catch(error => {
+        }).catch(error => {
             console.error('Erro ao carregar a página:', error);
         });
 }
@@ -40,11 +46,9 @@ function handleNavigation(event) {
     // Atualiza a URL
     window.location.hash = route;
 
-    // Exibe a página correspondente
-    showPage(route);
     var mobileMenu = document.querySelector(".mobile-menu");
     if (!isHidden(mobileMenu))
-       mobileMenu.classList.toggle("hidden");
+        mobileMenu.classList.toggle("hidden");
 }
 
 // Event listener para links de navegação
